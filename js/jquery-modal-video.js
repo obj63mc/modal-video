@@ -6,12 +6,12 @@
  *   license: appleple
  *   author: appleple
  *   homepage: http://developer.a-blogcms.jp
- *   version: 2.4.3
+ *   version: 2.4.4
  *
  * custom-event-polyfill:
  *   license: MIT (http://opensource.org/licenses/MIT)
- *   contributors: Frank Panetta, Mikhail Reenko <reenko@yandex.ru>, Joscha Feth <joscha@feth.com>
- *   homepage: https://github.com/krambuhl/custom-event-polyfill#readme
+ *   author: NO AUTHOR!
+ *   contributors: Frank Panetta (http://www.savvi.io), Mikhail Reenko <reenko@yandex.ru>, Joscha Feth <joscha@feth.com> (http://www.feth.com)
  *   version: 0.3.0
  *
  * es6-object-assign:
@@ -161,6 +161,7 @@ var assign = require('es6-object-assign').assign;
 var defaults = {
   channel: 'youtube',
   facebook: {},
+  local: {},
   youtube: {
     autoplay: 1,
     cc_load_policy: 1,
@@ -351,6 +352,8 @@ var ModalVideo = function () {
         return this.getVimeoUrl(opt.vimeo, videoId);
       } else if (channel === 'facebook') {
         return this.getFacebookUrl(opt.facebook, videoId);
+      } else if (channel === 'local') {
+        return videoId;
       }
       return '';
     }
@@ -380,7 +383,16 @@ var ModalVideo = function () {
     value: function getHtml(opt, videoUrl, id) {
       var padding = this.getPadding(opt.ratio);
       var classNames = opt.classNames;
-      return '\n      <div class="' + classNames.modalVideo + '" tabindex="-1" role="dialog" aria-label="' + opt.aria.openMessage + '" id="' + id + '">\n        <div class="' + classNames.modalVideoBody + '">\n          <div class="' + classNames.modalVideoInner + '" id="modal-video-inner-' + id + '">\n            <div class="' + classNames.modalVideoIframeWrap + '" style="padding-bottom:' + padding + '">\n              <button class="' + classNames.modalVideoCloseBtn + ' js-modal-video-dismiss-btn" aria-label="' + opt.aria.dismissBtnMessage + '"></button>\n              <iframe width=\'460\' height=\'230\' src="https:' + videoUrl + '" frameborder=\'0\' allowfullscreen=' + opt.allowFullScreen + ' tabindex="-1" ' + (opt.allowAutoplay ? 'allow="autoplay"' : '') + '/>\n            </div>\n          </div>\n        </div>\n      </div>\n    ';
+      var output = '\n      <div class="' + classNames.modalVideo + '" tabindex="-1" role="dialog" aria-label="' + opt.aria.openMessage + '" id="' + id + '">\n        <div class="' + classNames.modalVideoBody + '">\n          <div class="' + classNames.modalVideoInner + '" id="modal-video-inner-' + id + '">\n            <div class="' + classNames.modalVideoIframeWrap + '" style="padding-bottom:' + padding + '">\n              <button class="' + classNames.modalVideoCloseBtn + ' js-modal-video-dismiss-btn" aria-label="' + opt.aria.dismissBtnMessage + '"></button>\n    ';
+
+      if (channel == 'local') {
+        output += '<video width="460" height="230" src="' + videoUrl + '">';
+      } else {
+        output += '<iframe width=\'460\' height=\'230\' src="https:' + videoUrl + '" frameborder=\'0\' allowfullscreen=' + opt.allowFullScreen + ' tabindex="-1" ' + (opt.allowAutoplay ? 'allow="autoplay"' : '') + '/>';
+      }
+      output += '\n            </div>\n          </div>\n        </div>\n      </div>\n    ';
+
+      return output;
     }
   }]);
 

@@ -13,6 +13,7 @@ const assign = require('es6-object-assign').assign;
 const defaults = {
   channel: 'youtube',
   facebook: {},
+  local: {},
   youtube: {
     autoplay: 1,
     cc_load_policy: 1,
@@ -194,6 +195,8 @@ export default class ModalVideo {
       return this.getVimeoUrl(opt.vimeo, videoId);
     } else if (channel === 'facebook') {
       return this.getFacebookUrl(opt.facebook, videoId);
+    } else if (channel === 'local') {
+      return videoId;
     }
     return '';
   }
@@ -219,17 +222,26 @@ export default class ModalVideo {
   getHtml(opt, videoUrl, id) {
     const padding = this.getPadding(opt.ratio);
     const classNames = opt.classNames;
-    return (`
+    let output = `
       <div class="${classNames.modalVideo}" tabindex="-1" role="dialog" aria-label="${opt.aria.openMessage}" id="${id}">
         <div class="${classNames.modalVideoBody}">
           <div class="${classNames.modalVideoInner}" id="modal-video-inner-${id}">
             <div class="${classNames.modalVideoIframeWrap}" style="padding-bottom:${padding}">
               <button class="${classNames.modalVideoCloseBtn} js-modal-video-dismiss-btn" aria-label="${opt.aria.dismissBtnMessage}"></button>
-              <iframe width='460' height='230' src="https:${videoUrl}" frameborder='0' allowfullscreen=${opt.allowFullScreen} tabindex="-1" ${opt.allowAutoplay ? 'allow="autoplay"' : ''}/>
+    `;
+
+    if (channel == 'local') {
+      output += `<video width="460" height="230" src="${videoUrl}">`;
+    } else {
+      output += `<iframe width='460' height='230' src="https:${videoUrl}" frameborder='0' allowfullscreen=${opt.allowFullScreen} tabindex="-1" ${opt.allowAutoplay ? 'allow="autoplay"' : ''}/>`;
+    }
+    output += `
             </div>
           </div>
         </div>
       </div>
-    `);
+    `;
+
+    return output;
   }
 }
