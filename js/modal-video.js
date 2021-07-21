@@ -357,7 +357,7 @@ var ModalVideo = function () {
       var classNames = opt.classNames;
       var output = '\n      <div class="' + classNames.modalVideo + '" tabindex="-1" role="dialog" aria-label="' + opt.aria.openMessage + '" id="' + id + '">\n        <div class="' + classNames.modalVideoBody + '">\n          <div class="' + classNames.modalVideoInner + '" id="modal-video-inner-' + id + '">\n            <div class="' + classNames.modalVideoIframeWrap + '" style="padding-bottom:' + padding + '">\n              <button class="' + classNames.modalVideoCloseBtn + ' js-modal-video-dismiss-btn" aria-label="' + opt.aria.dismissBtnMessage + '"></button>\n    ';
 
-      if (channel == 'local') {
+      if (opt.channel == 'local') {
         output += '<video width="460" height="230" src="' + videoUrl + '">';
       } else {
         output += '<iframe width=\'460\' height=\'230\' src="https:' + videoUrl + '" frameborder=\'0\' allowfullscreen=' + opt.allowFullScreen + ' tabindex="-1" ' + (opt.allowAutoplay ? 'allow="autoplay"' : '') + '/>';

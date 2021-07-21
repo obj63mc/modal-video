@@ -227,7 +227,7 @@ export default class ModalVideo {
               <button class="${classNames.modalVideoCloseBtn} js-modal-video-dismiss-btn" aria-label="${opt.aria.dismissBtnMessage}"></button>
     `;
 
-    if (channel == 'local') {
+    if (opt.channel == 'local') {
       output += `<video width="460" height="230" src="${videoUrl}">`;
     } else {
       output += `<iframe width='460' height='230' src="https:${videoUrl}" frameborder='0' allowfullscreen=${opt.allowFullScreen} tabindex="-1" ${opt.allowAutoplay ? 'allow="autoplay"' : ''}/>`;
